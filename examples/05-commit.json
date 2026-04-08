@@ -1,0 +1,6 @@
+{
+  "required_auths": [],
+  "required_posting_auths": ["gandalf"],
+  "id": "everwitnessed",
+  "json": "{\"e\":1,\"h\":\"55203a2bd7eff1b9a95711bc2f0c3f4d38868ce87a55d8ea24d8ff96ddab6e15\"}"
+}

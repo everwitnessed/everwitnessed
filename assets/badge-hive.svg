@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="127" height="20" role="img" aria-label="Powered by: Hive">
+  <title>Powered by: Hive</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+    <stop offset="1" stop-opacity=".1"/>
+  </linearGradient>
+  <clipPath id="r">
+    <rect width="127" height="20" rx="3" fill="#fff"/>
+  </clipPath>
+  <g clip-path="url(#r)">
+    <rect width="92" height="20" fill="#555"/>
+    <rect x="92" width="35" height="20" fill="#97ca00"/>
+    <rect width="127" height="20" fill="url(#s)"/>
+  </g>
+  <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" text-rendering="geometricPrecision" font-size="110">
+    <!-- Hive mark, simple-icons, CC0. Nested SVG handles its own viewBox scaling. -->
+    <svg x="5" y="3" width="14" height="14" viewBox="0 0 24 24" fill="#e31337">
+      <path d="M6.076 1.637a.103.103 0 00-.09.05L.014 11.95a.102.102 0 000 .104l6.039 10.26c.04.068.14.068.18 0l5.972-10.262a.102.102 0 00-.002-.104L6.166 1.687a.103.103 0 00-.09-.05zm2.863 0c-.079 0-.13.085-.09.154l5.186 8.967a.105.105 0 00.09.053h3.117c.08 0 .13-.088.09-.157l-5.186-8.966a.104.104 0 00-.09-.051H8.94zm5.891 0a.102.102 0 00-.088.154L20.656 12l-5.914 10.209a.102.102 0 00.088.154h3.123a.1.1 0 00.088-.05l5.945-10.262a.1.1 0 000-.102L18.041 1.688a.1.1 0 00-.088-.051H14.83zm-.79 11.7a.1.1 0 00-.089.052l-5.101 8.82c-.04.069.01.154.09.154h3.117a.104.104 0 00.09-.05l5.1-8.82a.103.103 0 00-.09-.155h-3.118z"/>
+    </svg>
+    <text aria-hidden="true" x="555" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="650">Powered by</text>
+    <text x="555" y="140" transform="scale(.1)" fill="#fff" textLength="650">Powered by</text>
+    <text aria-hidden="true" x="1085" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="250">Hive</text>
+    <text x="1085" y="140" transform="scale(.1)" fill="#fff" textLength="250">Hive</text>
+  </g>
+</svg>
