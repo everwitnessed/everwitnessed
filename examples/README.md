@@ -1,25 +1,43 @@
 # EverWitnessed Protocol — Examples
 
-Concrete JSON payloads for each supported submission method.
+Concrete JSON payloads showing the shape of each EverWitnessed operation.
 
-All examples share the same EverWitnessed payload format — the inner JSON — regardless of whether it travels inside a `custom_json` `json` field or a `transfer` `memo`.
+The same payload format (`{"e":1,"h":…}`, plus optional `r` and `c` for reveal) travels in both `custom_json` `json` fields and transfer memos. These files show the operation **body** in its readable form (legacy asset string `"0.001 HBD"` for transfers, etc.); a wax client wraps as `{custom_json_operation: …}` / `{transfer_operation: …}` and converts assets to NAI.
 
-| File | Method | Signer | Key | Cost | Identity |
-|------|--------|--------|-----|------|----------|
-| [`01-custom-json-timestamp.json`](./01-custom-json-timestamp.json) | `custom_json` — non-custodial | user | posting | free (RC) | blockchain auth |
-| [`02-custom-json-custodial.json`](./02-custom-json-custodial.json) | `custom_json` — custodial | `@everwitnessed` | posting | free to user | trust-based |
-| [`03-transfer-to-everwitnessed.json`](./03-transfer-to-everwitnessed.json) | Transfer to `@everwitnessed` | user | active | 0.001 HBD | blockchain auth |
-| [`04-transfer-to-self.json`](./04-transfer-to-self.json) | Transfer to self | user | active | 0.001 HBD | blockchain auth |
-| [`05-commit.json`](./05-commit.json) | Commit (phase 1 of commit/reveal) | user | posting | free (RC) | blockchain auth |
-| [`06-reveal.json`](./06-reveal.json) | Reveal (phase 2 of commit/reveal) | user | posting | free (RC) | blockchain auth |
+| File | Operation |
+|------|-----------|
+| [`01-custom-json.json`](./01-custom-json.json) | `custom_json` carrying the EverWitnessed payload (recommended path) |
+| [`02-transfer.json`](./02-transfer.json) | Transfer carrying the same payload in the memo (alternative path) |
+| [`03-commit.json`](./03-commit.json) | Commit phase: a `custom_json` whose `h` is the commitment value |
+| [`04-reveal.json`](./04-reveal.json) | Reveal phase: a `custom_json` carrying `{e, h, r, c}` |
 
-## Values used in the examples
+For `02-transfer.json` the recipient is `everwitnessed`. Per the spec, the recipient may be any account; sending to `@everwitnessed` (or to oneself) are both common patterns.
 
-- **File hash `h`** = `6c1adcafe1cf72602fc9fff64d35304a649c27bff5ef16b2034fbe673c8b4c70` — the SHA-256 of the ASCII string `everwitnessed.net`. Reproduce with `printf "everwitnessed.net" | sha256sum`.
-- **Reveal nonce `r`** = `beeab0de00000000000000000000000000000000000000000000000000000000` — the full 64-hex-char (256-bit) Hive chain id, used here as a recognizable constant at the maximum nonce length. Any 32–64 hex-character random value is valid in real use.
-- **Commit reference `c`** = `027e1a81b357817388dea1e84e0d388809adbefb` — the id of the first block produced after Hive's fork from the legacy chain; used here only because it's a recognizable 40-char hex value.
-- **Commit payload `h`** (in `05-commit.json`) = `55203a2bd7eff1b9a95711bc2f0c3f4d38868ce87a55d8ea24d8ff96ddab6e15` — computed as `sha256(nonce + h)` over the string concatenation of the reveal nonce and the file hash shown above.
-- **Account** = `gandalf`.
+## Values used
+
+All examples share these:
+
+- **File content:** the 12-byte UTF-8 sequence `f09fa799 f09fa9b6 f09fa684`.
+- **File hash `h`:** `409c44e6ae488ba6696c7d165afb01f0aa5ae72ed40dab4b95f914984fef61cc`. Reproduce:
+  ```sh
+  printf 'f09fa799f09fa9b6f09fa684' | xxd -r -p | sha256sum
+  ```
+- **Account:** `everwitnessed`.
+
+The commit/reveal pair adds:
+
+- **Reveal nonce `r`:** `b0f200ce4f1c88c57e42e803a9ad360ab4e2a4bc95a7539f25b701d92bdb62f7` — a fresh 64-hex (256-bit) draw. **In real use the nonce MUST be a CSPRNG output, never a constant.**
+- **Commit reference `c`:** `c5000470eaa07f1d7925f69d45dcd7f6d5d48bd1` — the transaction id of the commit that the reveal points back to.
+
+The commit's `h` is `sha256(r || h)` over the byte-concatenation of the nonce and the file hash:
+
+```sh
+printf '%s%s' \
+  'b0f200ce4f1c88c57e42e803a9ad360ab4e2a4bc95a7539f25b701d92bdb62f7' \
+  '409c44e6ae488ba6696c7d165afb01f0aa5ae72ed40dab4b95f914984fef61cc' \
+  | sha256sum
+# → 0432b32c61cc4ffbba01caa35e00e56f1a3630fa3ba3491894f7e5347b20b0fe
+```
 
 ## See also
 
