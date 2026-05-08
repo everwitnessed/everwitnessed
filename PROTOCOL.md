@@ -189,7 +189,21 @@ An observer of the P2P network, including a malicious block producer, can see a 
 
 ### Phase 1. Commit
 
-User computes `commitment = sha256(nonce + h)` and broadcasts:
+User computes the commitment by SHA-256-hashing the ASCII concatenation of the lowercase-hex strings `nonce` and `h`:
+
+```
+commitment = sha256( ascii(nonce_hex) ‖ ascii(h_hex) )
+```
+
+That is: take the lowercase-hex character form of `nonce` (32–64 chars) and of `h` (64 chars), concatenate them as ASCII bytes (yielding 96–128 bytes), and SHA-256 the result. **Do not byte-decode the hex first** — implementations that hash the raw 32-byte values will produce a different commitment that does not bind.
+
+Reproduce in shell:
+
+```sh
+printf '%s%s' "$nonce" "$h" | sha256sum
+```
+
+Then broadcast:
 
 ```json
 {"e":1,"h":"<commitment>"}
@@ -211,7 +225,7 @@ Once the commit is irreversible (OBI typically advances finality within the same
 
 1. Look up the reveal transaction; read `h`, `r`, `c`.
 2. Look up the commit transaction referenced by `c`; read the committed hash and the block time.
-3. Verify that `sha256(r + h)` equals the committed hash.
+3. Verify the commitment binding: SHA-256 the ASCII concatenation of the lowercase-hex strings `r` and `h` (i.e. `sha256( ascii(r_hex) ‖ ascii(h_hex) )`) and check it equals the commit's `h`.
 4. If it matches, the file hash `h` was committed at the commit's block time.
 
 No timestamp field appears in the payload; the block time is the proof.

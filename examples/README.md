@@ -29,7 +29,7 @@ The commit/reveal pair adds:
 - **Reveal nonce `r`:** `b0f200ce4f1c88c57e42e803a9ad360ab4e2a4bc95a7539f25b701d92bdb62f7` — a fresh 64-hex (256-bit) draw. **In real use the nonce MUST be a CSPRNG output, never a constant.**
 - **Commit reference `c`:** `c5000470eaa07f1d7925f69d45dcd7f6d5d48bd1` — the transaction id of the commit that the reveal points back to.
 
-The commit's `h` is `sha256(r || h)` over the byte-concatenation of the nonce and the file hash:
+The commit's `h` is the SHA-256 of the **ASCII concatenation of the lowercase-hex strings** `r` and `h` (NOT a byte-decode of either — see PROTOCOL.md §Commit / Reveal):
 
 ```sh
 printf '%s%s' \
