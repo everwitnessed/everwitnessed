@@ -2,7 +2,7 @@
 
 Concrete JSON payloads showing the shape of each EverWitnessed operation.
 
-The same payload format (`{"e":1,"h":…}`, plus optional `r` and `c` for reveal) travels in both `custom_json` `json` fields and transfer memos. These files show the operation **body** in its readable form (legacy asset string `"0.001 HBD"` for transfers, etc.); a wax client wraps as `{custom_json_operation: …}` / `{transfer_operation: …}` and converts assets to NAI.
+The same payload format (`{"e":2,"h":…}`, plus optional `a` for the hash algorithm and `r`/`c` for reveal) travels in both `custom_json` `json` fields and transfer memos. These files show the operation **body** in its readable form (legacy asset string `"0.001 HBD"` for transfers, etc.); a wax client wraps as `{custom_json_operation: …}` / `{transfer_operation: …}` and converts assets to NAI.
 
 | File | Operation |
 |------|-----------|
@@ -26,17 +26,18 @@ All examples share these:
 
 The commit/reveal pair adds:
 
-- **Reveal nonce `r`:** `b0f200ce4f1c88c57e42e803a9ad360ab4e2a4bc95a7539f25b701d92bdb62f7` — a fresh 64-hex (256-bit) draw. **In real use the nonce MUST be a CSPRNG output, never a constant.**
-- **Commit reference `c`:** `c5000470eaa07f1d7925f69d45dcd7f6d5d48bd1` — the transaction id of the commit that the reveal points back to.
+- **Reveal nonce `r`:** `1b2903784675a6670547bdacb8a1e94f9ba2b5518b3263ac9725ae48a9caf7ad` — a fresh 64-hex (256-bit) CSPRNG draw. **The nonce MUST be a CSPRNG output, never a constant.**
+- **Commit reference `c`:** `174cf6f46fb5052f74b86d3d539bfe781630c801` — the transaction id of the commit the reveal points back to.
 
-The commit's `h` is the SHA-256 of the **ASCII concatenation of the lowercase-hex strings** `r` and `h` (NOT a byte-decode of either — see PROTOCOL.md §Commit / Reveal):
+In `e:2` the commit's `h` **binds the committer**: it is the SHA-256 of the **comma-separated ASCII concatenation of the committer account, the lowercase-hex nonce `r`, and the lowercase-hex file hash `h`** (see PROTOCOL.md §Commit / Reveal):
 
 ```sh
-printf '%s%s' \
-  'b0f200ce4f1c88c57e42e803a9ad360ab4e2a4bc95a7539f25b701d92bdb62f7' \
+printf '%s,%s,%s' \
+  'everwitnessed' \
+  '1b2903784675a6670547bdacb8a1e94f9ba2b5518b3263ac9725ae48a9caf7ad' \
   '409c44e6ae488ba6696c7d165afb01f0aa5ae72ed40dab4b95f914984fef61cc' \
   | sha256sum
-# → 0432b32c61cc4ffbba01caa35e00e56f1a3630fa3ba3491894f7e5347b20b0fe
+# → 37f136dd2d76c336291a03b7597996efd564565796a54e393e4cdb359bd1839a
 ```
 
 ## See also

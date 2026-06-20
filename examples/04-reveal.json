@@ -2,5 +2,5 @@
   "required_auths": [],
   "required_posting_auths": ["everwitnessed"],
   "id": "everwitnessed",
-  "json": "{\"e\":1,\"h\":\"409c44e6ae488ba6696c7d165afb01f0aa5ae72ed40dab4b95f914984fef61cc\",\"r\":\"b0f200ce4f1c88c57e42e803a9ad360ab4e2a4bc95a7539f25b701d92bdb62f7\",\"c\":\"c5000470eaa07f1d7925f69d45dcd7f6d5d48bd1\"}"
+  "json": "{\"e\":2,\"h\":\"409c44e6ae488ba6696c7d165afb01f0aa5ae72ed40dab4b95f914984fef61cc\",\"r\":\"1b2903784675a6670547bdacb8a1e94f9ba2b5518b3263ac9725ae48a9caf7ad\",\"c\":\"174cf6f46fb5052f74b86d3d539bfe781630c801\"}"
 }
