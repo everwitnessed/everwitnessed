@@ -12,20 +12,21 @@ Write a SHA-256 hash to Hive, get a permanent, publicly verifiable timestamp. No
 
 ## What it is
 
-A minimal JSON payload carried by a Hive `custom_json` operation or transfer memo. Two fields are required; two more are used only for the commit/reveal flow.
+A minimal JSON payload carried by a Hive `custom_json` operation or transfer memo. Two fields are required; the others cover hash-algorithm choice and the commit/reveal flow.
 
 ```json
-{"e":1,"h":"6c1adcafe1cf72602fc9fff64d35304a649c27bff5ef16b2034fbe673c8b4c70"}
+{"e":2,"h":"6c1adcafe1cf72602fc9fff64d35304a649c27bff5ef16b2034fbe673c8b4c70"}
 ```
 
 | Field | Required | Purpose |
 |-------|----------|---------|
-| `e`   | yes | Protocol version and marker |
-| `h`   | yes | SHA-256 digest, lowercase hex (64 chars) |
-| `r`   | reveal only | Nonce used in the commitment |
+| `e`   | yes | Protocol version and marker (`1` or `2`) |
+| `h`   | yes | File digest, lowercase hex (SHA-256 by default) |
+| `a`   | optional (`e:2`) | File-hash algorithm (`sha256` default, or `sha512`) |
+| `r`   | reveal only | CSPRNG nonce used in the commitment |
 | `c`   | reveal only | Transaction id of the commit |
 
-That's the entire protocol. Metadata (filename, description, tag) is deliberately off-chain; it belongs to the service layer.
+That's the entire protocol. Version 2 is current (`e:2`); version 1 remains valid — see [Versioning](./PROTOCOL.md#versioning). Metadata (filename, description, tag) is deliberately off-chain; it belongs to the service layer.
 
 ---
 
